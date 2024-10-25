@@ -26,6 +26,7 @@ const Ad = new Schema({
         type: Number,
         required: true
     },
+    lastTime:Date,
     status: {
         type: String,
         enum: ['active', 'pending', 'expried'],

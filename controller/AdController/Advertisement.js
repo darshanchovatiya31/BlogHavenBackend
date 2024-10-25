@@ -196,7 +196,12 @@ exports.putstatusactive = async (req, res, next) => {
 
 exports.addstatusfilter = async (req,res,next) =>{
   try {
-    const add = await Advertisement.find()
+    const {userId} = req.params;
+    if(!userId){
+      return next(new ErrorHandler("userId not found", StatusCodes.BAD_REQUEST));
+    }
+
+    const add = await Advertisement.find({userId:userId})
     if(!add){
       return next(new ErrorHandler("Advertisement not found", StatusCodes.NOT_FOUND));
     }
@@ -211,8 +216,52 @@ exports.addstatusfilter = async (req,res,next) =>{
         active:active,
       }
     })
-
   } catch (error) {
     return next(new ErrorHandler(error.message,StatusCodes.INTERNAL_SERVER_ERROR));
+  }
+}
+
+exports.invoice = async (req,res,next)=>{
+  try {
+    const {userId} = req.params;
+    if(!userId){
+      return next(new ErrorHandler("userId not Found",StatusCodes.BAD_REQUEST))
+    }
+
+    const Invoice = await Advertisement.find({userId:userId,paymentClear:true})
+    if(!Invoice){
+      return next(new ErrorHandler("Payment not cleared",StatusCodes.BAD_REQUEST))
+    }
+
+    return res.status(StatusCodes.OK).json({
+      success:true,
+      message:"Invoice successfully",
+      data:Invoice,
+    })
+  } catch (error) {
+    return next(new ErrorHandler(error.message,StatusCodes.INTERNAL_SERVER_ERROR))
+  }
+}
+
+exports.invoicesingle = async (req,res,next) =>{
+  try {
+    const {adId} = req.params;
+    
+    if(!adId){
+      return next(new ErrorHandler("userId not found",StatusCodes.BAD_REQUEST))
+    } 
+
+    const invoicedata = await Advertisement.findById(adId).populate("userId");
+    if(!invoicedata){
+      return next(new ErrorHandler("invoice data not found",StatusCodes.NOT_FOUND))
+    }
+    
+    return res.status(StatusCodes.OK).json({
+      success:true,
+      message:"invoice data successfully",
+      data:invoicedata,
+    })
+  } catch (error) {
+    return next(new ErrorHandler(error.message,StatusCodes.INTERNAL_SERVER_ERROR))
   }
 }

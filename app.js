@@ -3,6 +3,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const { errorMiddleware } = require("./middleware/errorHandler");
+const AdExprie = require('./util/node-corn')
 
 const app = express();
 
@@ -17,6 +18,8 @@ app.use(cors(corsOptions));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+
+AdExprie()
 
 const user = require("./routes/user");
 const blog = require("./routes/Blog");

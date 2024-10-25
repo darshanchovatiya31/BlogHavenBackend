@@ -21,7 +21,6 @@ router.put("/user/update-password/:userId",putResetPass)
 
 router.delete("/user/delete-otp/:userId",deleteotp)
 
-
 router.get("/user/profiledata",authntication ,getProfileData)
 
 router.put("/user/update-profile/:userId",authntication,uploadMulter.single("profile"),putUpdateProfile)
