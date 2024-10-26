@@ -4,6 +4,7 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const { errorMiddleware } = require("./middleware/errorHandler");
 const AdExprie = require('./util/node-corn')
+const helmet = require('helmet')
 
 const app = express();
 
@@ -15,6 +16,8 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
+app.use(helmet());
+
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));

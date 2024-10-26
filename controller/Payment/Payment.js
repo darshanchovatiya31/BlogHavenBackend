@@ -104,15 +104,13 @@ exports.postverfying = async (req, res, next) => {
     }
 
     if (response.data.order_status === "PAID") {
+      const day = parseInt(ad.ad_duration);
       ad.paymentClear = true;
       ad.paynow = 1;
+      ad.lastTime = moment().add(day, 'days');
+      ad.payment = response.data;
+      await ad.save();
     }
-
-    const day = parseInt(ad.ad_duration);
-
-    ad.lastTime = moment().add(day, 'days');
-    ad.payment = response.data;
-    await ad.save();
 
     console.log("Paymnenst SuccessFully Created");
 
