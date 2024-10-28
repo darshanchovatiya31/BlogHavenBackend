@@ -13,7 +13,7 @@ const transpoter = nodemailer.createTransport({
   port: 465,
   auth: {
     user: "darshanchovatiya30@gmail.com",
-    pass: "ezgv skmf szna bjzt",
+    pass: "pkjp umhx orti vuok",
   },
 });
 
