@@ -111,7 +111,7 @@ exports.getBlogsdata = async (req, res, next) => {
 
 exports.getHomeBlogs = async (req, res, next) => {
   try {
-    const blogs = await Blog.find().populate("userId");
+    const blogs = await Blog.find().populate("userId").sort({ createdAt: -1 });
     
     if (!blogs) {
       return next(new ErrorHandler("Blog Not found", StatusCodes.NOT_FOUND));
@@ -264,7 +264,7 @@ exports.UpdateBlog = async (req, res, next) => {
 exports.homePageCategory = async(req,res,next) => {
   try {
 
-    const blogs = await Blog.find()
+    const blogs = await Blog.find().sort({ createdAt: -1 });
     if (!blogs) {
       return next(new ErrorHandler("Blog not found", StatusCodes.NOT_FOUND));
     }
