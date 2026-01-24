@@ -12,8 +12,8 @@ const transpoter = nodemailer.createTransport({
   secure: true,
   port: 465,
   auth: {
-    user: "darshanchovatiya30@gmail.com",
-    pass: "pkjp umhx orti vuok",
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS,
   },
 });
 
@@ -47,7 +47,7 @@ exports.postUserSignUp = async (req, res, next) => {
 
       //node mailer
       await transpoter.sendMail({
-        from: "darshanchovatiya30@gmail.com",
+        from: process.env.EMAIL_USER,
         to: email,
         subject: "blog signup",
         text: "welcome to signup",

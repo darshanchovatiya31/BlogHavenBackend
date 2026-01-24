@@ -11,8 +11,8 @@ const transpoter = nodemailer.createTransport({
   secure: true,
   port: 465,
   auth: {
-    user: "darshanchovatiya30@gmail.com",
-    pass: "pkjp umhx orti vuok",
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS,
   },
 });
 
@@ -37,7 +37,7 @@ exports.sendOtp = async (req, res, next) => {
     });
 
     await transpoter.sendMail({
-      from: "darshanchovatiya30@gmail.com",
+      from: process.env.EMAIL_USER,
       to: otpsend.email,
       subject: "Forget Password",
       html: `

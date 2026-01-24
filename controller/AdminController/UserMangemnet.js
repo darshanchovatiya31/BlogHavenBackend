@@ -8,8 +8,8 @@ const transpoter = nodemailer.createTransport({
     secure: true,
     port: 465,
     auth: {
-      user: "darshanchovatiya30@gmail.com",
-      pass: "pkjp umhx orti vuok",
+      user: process.env.EMAIL_USER,
+      pass: process.env.EMAIL_PASS,
     },
   });
 
@@ -32,7 +32,7 @@ exports.UserStatusChage = async(req,res,next) => {
 
         if(status === 'active'){
             await transpoter.sendMail({
-                from: "darshanchovatiya30@gmail.com",
+                from: process.env.EMAIL_USER,
                 to: userStatus.email,
                 subject: "Account Approved",
                 html: `
@@ -52,7 +52,7 @@ exports.UserStatusChage = async(req,res,next) => {
             });
         } else if(status === 'block'){
             await transpoter.sendMail({
-                from: "darshanchovatiya30@gmail.com",
+                from: process.env.EMAIL_USER,
                 to: userStatus.email,
                 subject: "Account Blocked",
                 html: `
