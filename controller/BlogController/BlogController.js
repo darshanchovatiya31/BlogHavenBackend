@@ -36,6 +36,23 @@ exports.postdata = async (req, res, next) => {
       );
     }
 
+    // Validate category exists in database
+    const Category = require("../../model/Category/Category");
+    const normalizedCategory = category.toUpperCase().trim();
+    const validCategory = await Category.findOne({ 
+      name: normalizedCategory, 
+      isActive: true 
+    });
+
+    if (!validCategory) {
+      return next(
+        new ErrorHandler(
+          "Invalid category. Please select a valid category from the list.",
+          StatusCodes.BAD_REQUEST
+        )
+      );
+    }
+
     const blog_img = await FilestorageFirabse.uploadToFierbase(
       blogimg,
       userId,
@@ -52,7 +69,7 @@ exports.postdata = async (req, res, next) => {
     const Blogdata = await Blog.create({
       name,
       title,
-      category,
+      category: normalizedCategory, // Store normalized category
       maindescription,
       adddescription1,
       adddescription2,
@@ -212,6 +229,23 @@ exports.UpdateBlog = async (req, res, next) => {
       return next(new ErrorHandler("All Fileds are requried", StatusCodes.BAD_REQUEST));
     }
 
+    // Validate category exists in database
+    const Category = require("../../model/Category/Category");
+    const normalizedCategory = category.toUpperCase().trim();
+    const validCategory = await Category.findOne({ 
+      name: normalizedCategory, 
+      isActive: true 
+    });
+
+    if (!validCategory) {
+      return next(
+        new ErrorHandler(
+          "Invalid category. Please select a valid category from the list.",
+          StatusCodes.BAD_REQUEST
+        )
+      );
+    }
+
     const blogs = await Blog.findById(blogId);
     if (!blogs) {
       return next(new ErrorHandler("blog not found", StatusCodes.NOT_FOUND));
@@ -246,7 +280,7 @@ exports.UpdateBlog = async (req, res, next) => {
     blogs.maindescription = maindescription
     blogs.adddescription1 = adddescription1
     blogs.adddescription2 = adddescription2
-    blogs.category = category
+    blogs.category = normalizedCategory // Store normalized category
 
     const updateblog = await blogs.save()
 
@@ -263,33 +297,34 @@ exports.UpdateBlog = async (req, res, next) => {
 
 exports.homePageCategory = async(req,res,next) => {
   try {
-
+    const Category = require("../../model/Category/Category");
+    
+    // Get all active categories
+    const categories = await Category.find({ isActive: true }).sort({ name: 1 });
+    
+    // Get all blogs
     const blogs = await Blog.find().sort({ createdAt: -1 });
-    if (!blogs) {
-      return next(new ErrorHandler("Blog not found", StatusCodes.NOT_FOUND));
+    
+    if (!blogs || blogs.length === 0) {
+      return res.status(StatusCodes.OK).json({
+        success: true,
+        message: "Blogs fetched successfully",
+        data: {}
+      });
     }
 
-    let Business = blogs.filter(blog => blog.category === 'Business');
-    let Education = blogs.filter(blog => blog.category === 'Education');
-    let Food = blogs.filter(blog => blog.category === 'Food');
-    let Arts = blogs.filter(blog => blog.category === 'Arts');
-    let Fashion = blogs.filter(blog => blog.category === 'Fashion');
-    let Entertainment = blogs.filter(blog => blog.category === 'Entertainment');
-
+    // Group blogs by category dynamically
+    const categoryData = {};
+    
+    categories.forEach(category => {
+      categoryData[category.name] = blogs.filter(blog => blog.category === category.name);
+    });
 
     return res.status(StatusCodes.OK).json({
       success: true,
-      message: "Update Blog Successfully",
-      data: {
-        Business:Business,
-        Education:Education,
-        Food:Food,
-        Arts:Arts,
-        Fashion:Fashion,
-        Entertainment:Entertainment
-      }
+      message: "Category blogs fetched successfully",
+      data: categoryData
     });
-
 
   } catch (error) {
     return next(new ErrorHandler(error.message,StatusCodes.INTERNAL_SERVER_ERROR));

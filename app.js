@@ -28,11 +28,13 @@ const user = require("./routes/user");
 const blog = require("./routes/Blog");
 const admin = require("./routes/admin")
 const advertisement = require("./routes/advertisement")
+const category = require("./routes/category")
 
 app.use(user);
 app.use(blog);
 app.use(admin);
 app.use(advertisement);
+app.use(category);
 
 
 app.use(errorMiddleware);
