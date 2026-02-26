@@ -2,20 +2,21 @@ const User = require('../../model/User/User')
 const bcrypt = require("bcryptjs");
 const { ErrorHandler } = require('../../middleware/errorHandler')
 const { StatusCodes } = require('http-status-codes')
-const nodemailer = require("nodemailer");
+// Email functionality commented out - no email credentials configured
+// const nodemailer = require("nodemailer");
 const jwt = require('jsonwebtoken')
 const FilestorageFirabse = require('../../middleware/multerFileStorgae')
 
-//node mailer
-const transpoter = nodemailer.createTransport({
-  service: "gmail",
-  secure: true,
-  port: 465,
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS,
-  },
-});
+//node mailer - commented out
+// const transpoter = nodemailer.createTransport({
+//   service: "gmail",
+//   secure: true,
+//   port: 465,
+//   auth: {
+//     user: process.env.EMAIL_USER,
+//     pass: process.env.EMAIL_PASS,
+//   },
+// });
 
 exports.postUserSignUp = async (req, res, next) => {
   try {
@@ -45,45 +46,46 @@ exports.postUserSignUp = async (req, res, next) => {
         );
       }
 
-      //node mailer
-      await transpoter.sendMail({
-        from: process.env.EMAIL_USER,
-        to: email,
-        subject: "blog signup",
-        text: "welcome to signup",
-        html: `
-          <div style="font-family: Arial, sans-serif; color: #333;">
-                <h1 style="color: #4CAF50;">Welcome, ${fname}!</h1>
-                <p>We’re excited to have you join <strong>BlogHaven</strong>, a vibrant space for creativity and self-expression.</p>
-                
-                <h2 style="color: #4CAF50;">Your account has been successfully created!</h2>
-                <p>Your profile is currently under review by our team. This process may take up to 24 hours, and you’ll receive an email notification once your profile is approved.</p>
-        
-                <h3 style="color: #4CAF50;">What’s next?</h3>
-                <p>While you wait, here are a few key guidelines to help you get started:</p>
-                
-                <ul style="background-color: #f9f9f9; padding: 15px; border-radius: 8px; list-style: none; color: #333;">
-                    <li style="margin-bottom: 10px;">
-                        <strong>🔹 Original Content:</strong> Ensure that all your posts are original or properly credited. Plagiarism may lead to content removal and possible account suspension.
-                    </li>
-                    <li style="margin-bottom: 10px;">
-                        <strong>🔹 No Misinformation:</strong> Always share accurate and verified information. Misleading content can result in penalties.
-                    </li>
-                    <li style="margin-bottom: 10px;">
-                        <strong>🔹 Respect User Privacy:</strong> Do not share personal details without consent. Privacy violations may lead to restrictions.
-                    </li>
-                    <li style="margin-bottom: 10px;">
-                        <strong>🔹 No Explicit Content:</strong> Posting adult or inappropriate content without proper labels or warnings is prohibited. Violators may face account suspension.
-                    </li>
-                </ul>
-        
-                <p>Thank you for joining BlogHaven! We look forward to seeing your creativity thrive.</p>
-        
-                <h3 style="color: #4CAF50;">Best regards,</h3>
-                <p>The BlogHaven Team</p>
-            </div>
-        `,
-      });
+      // Email sending functionality commented out - no email credentials configured
+      // node mailer
+      // await transpoter.sendMail({
+      //   from: process.env.EMAIL_USER,
+      //   to: email,
+      //   subject: "blog signup",
+      //   text: "welcome to signup",
+      //   html: `
+      //     <div style="font-family: Arial, sans-serif; color: #333;">
+      //           <h1 style="color: #4CAF50;">Welcome, ${fname}!</h1>
+      //           <p>We're excited to have you join <strong>BlogHaven</strong>, a vibrant space for creativity and self-expression.</p>
+      //           
+      //           <h2 style="color: #4CAF50;">Your account has been successfully created!</h2>
+      //           <p>Your profile is currently under review by our team. This process may take up to 24 hours, and you'll receive an email notification once your profile is approved.</p>
+      //   
+      //           <h3 style="color: #4CAF50;">What's next?</h3>
+      //           <p>While you wait, here are a few key guidelines to help you get started:</p>
+      //           
+      //           <ul style="background-color: #f9f9f9; padding: 15px; border-radius: 8px; list-style: none; color: #333;">
+      //               <li style="margin-bottom: 10px;">
+      //                   <strong>🔹 Original Content:</strong> Ensure that all your posts are original or properly credited. Plagiarism may lead to content removal and possible account suspension.
+      //               </li>
+      //               <li style="margin-bottom: 10px;">
+      //                   <strong>🔹 No Misinformation:</strong> Always share accurate and verified information. Misleading content can result in penalties.
+      //               </li>
+      //               <li style="margin-bottom: 10px;">
+      //                   <strong>🔹 Respect User Privacy:</strong> Do not share personal details without consent. Privacy violations may lead to restrictions.
+      //               </li>
+      //               <li style="margin-bottom: 10px;">
+      //                   <strong>🔹 No Explicit Content:</strong> Posting adult or inappropriate content without proper labels or warnings is prohibited. Violators may face account suspension.
+      //               </li>
+      //           </ul>
+      //   
+      //           <p>Thank you for joining BlogHaven! We look forward to seeing your creativity thrive.</p>
+      //   
+      //           <h3 style="color: #4CAF50;">Best regards,</h3>
+      //           <p>The BlogHaven Team</p>
+      //       </div>
+      //   `,
+      // });
     const hasspasword = await bcrypt.hash(password, 10);
     
     const profile_picture = await FilestorageFirabse.uploadToFierbase(profile,null, 'user','profile');

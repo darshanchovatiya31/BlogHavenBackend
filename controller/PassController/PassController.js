@@ -3,18 +3,20 @@ const { StatusCodes } = require("http-status-codes");
 const User = require("../../model/User/User");
 const bcrypt = require("bcryptjs");
 const Otp = require("../../model/otp/otp");
-const nodemailer = require("nodemailer");
+// Email functionality commented out - no email credentials configured
+// const nodemailer = require("nodemailer");
 const otpGenerator = require("otp-generator");
 
-const transpoter = nodemailer.createTransport({
-  service: "gmail",
-  secure: true,
-  port: 465,
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS,
-  },
-});
+// Email transporter commented out
+// const transpoter = nodemailer.createTransport({
+//   service: "gmail",
+//   secure: true,
+//   port: 465,
+//   auth: {
+//     user: process.env.EMAIL_USER,
+//     pass: process.env.EMAIL_PASS,
+//   },
+// });
 
 exports.sendOtp = async (req, res, next) => {
   try {
@@ -36,15 +38,16 @@ exports.sendOtp = async (req, res, next) => {
       userId: user._id,
     });
 
-    await transpoter.sendMail({
-      from: process.env.EMAIL_USER,
-      to: otpsend.email,
-      subject: "Forget Password",
-      html: `
-        <img src="https://firebasestorage.googleapis.com/v0/b/blogs-7dbc9.appspot.com/o/comapny%20Image%2Fmainlogo.png?alt=media&token=0b99d0cd-cf5a-4502-a4d7-d8353b86f975" width="300px" height="200px"/>
-        <h1>Forget Password Otp: ${otpsend.otp}</h1>
-      `,
-    });
+    // Email sending functionality commented out - no email credentials configured
+    // await transpoter.sendMail({
+    //   from: process.env.EMAIL_USER,
+    //   to: otpsend.email,
+    //   subject: "Forget Password",
+    //   html: `
+    //     <img src="https://firebasestorage.googleapis.com/v0/b/blogs-7dbc9.appspot.com/o/comapny%20Image%2Fmainlogo.png?alt=media&token=0b99d0cd-cf5a-4502-a4d7-d8353b86f975" width="300px" height="200px"/>
+    //     <h1>Forget Password Otp: ${otpsend.otp}</h1>
+    //   `,
+    // });
 
     return res.status(StatusCodes.CREATED).json({
       success: true,
